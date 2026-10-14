@@ -1,0 +1,136 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  --pine: #12302b;
+  --forest: #1f5a4c;
+  --teal: #2e7d6b;
+  --saffron: #f2a33a;
+  --mist: #eef4f1;
+  --paper: #fbf8f1;
+  --terracotta: #c8553d;
+  --stone: #6f817b;
+}
+
+@layer base {
+  html {
+    -webkit-text-size-adjust: 100%;
+  }
+  body {
+    @apply bg-paper font-sans text-pine antialiased;
+    font-feature-settings: 'ss01', 'kern';
+    min-height: 100vh;
+  }
+  h1, h2, h3, h4 {
+    @apply font-display text-pine;
+    font-variation-settings: 'SOFT' 60, 'WONK' 1;
+    letter-spacing: -0.01em;
+  }
+  ::selection {
+    background: var(--saffron);
+    color: var(--pine);
+  }
+  :focus-visible {
+    outline: 2px solid var(--saffron);
+    outline-offset: 3px;
+  }
+}
+
+/* Paper grain: tiny fractal-noise tile, multiplied over the page */
+.grain::after {
+  content: '';
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+  z-index: 60;
+  opacity: 0.35;
+  mix-blend-mode: multiply;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.85' numOctaves='2' stitchTiles='stitch'/%3E%3CfeColorMatrix values='0 0 0 0 .45  0 0 0 0 .35  0 0 0 0 .2  0 0 0 .13 0'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+}
+
+/* Saffron highlighter swipe behind key numbers */
+.highlight {
+  background-image: linear-gradient(
+    100deg,
+    transparent 0%,
+    rgba(242, 163, 58, 0.55) 3%,
+    rgba(242, 163, 58, 0.7) 50%,
+    rgba(242, 163, 58, 0.5) 97%,
+    transparent 100%
+  );
+  background-repeat: no-repeat;
+  background-size: 100% 0.55em;
+  background-position: 0 82%;
+  padding: 0 0.12em;
+  margin: 0 -0.12em;
+  -webkit-box-decoration-break: clone;
+  box-decoration-break: clone;
+}
+
+/* Local, heavier grain for hero slabs (sits inside its own stacking context) */
+.grain-heavy::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  z-index: 1;
+  opacity: 0.9;
+  mix-blend-mode: multiply;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='120' height='120'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.7' numOctaves='3' stitchTiles='stitch'/%3E%3CfeColorMatrix values='0 0 0 0 .3  0 0 0 0 .22  0 0 0 0 .1  0 0 0 .22 0'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+}
+
+/* Pencil hatching: diagonal strokes, used as a fill on bar tracks and slabs */
+.hatch {
+  background-image: repeating-linear-gradient(-52deg, rgba(18, 48, 43, 0.16) 0 1.5px, transparent 1.5px 7px);
+}
+.hatch-light {
+  background-image: repeating-linear-gradient(-52deg, rgba(251, 248, 241, 0.14) 0 1.5px, transparent 1.5px 7px);
+}
+
+/* Halftone dots, fading out toward the bottom-left */
+.halftone {
+  background-image: radial-gradient(rgba(18, 48, 43, 0.28) 1.3px, transparent 1.6px);
+  background-size: 9px 9px;
+  -webkit-mask-image: linear-gradient(200deg, #000 0%, transparent 70%);
+  mask-image: linear-gradient(200deg, #000 0%, transparent 70%);
+}
+
+.font-num {
+  font-family: 'Fraunces', Georgia, serif;
+  font-variation-settings: 'SOFT' 40, 'opsz' 96;
+  font-variant-numeric: lining-nums;
+  letter-spacing: -0.02em;
+}
+
+/* Hindi: Devanagari faces, relaxed tracking and line height so matras are never clipped */
+:lang(hi) {
+  font-family: 'Noto Sans Devanagari', 'Instrument Sans', system-ui, sans-serif;
+}
+:lang(hi) .font-display,
+:lang(hi) :is(h1, h2, h3, h4) {
+  font-family: 'Noto Serif Devanagari', 'Fraunces', Georgia, serif;
+  font-variation-settings: normal;
+}
+:lang(hi) .font-num {
+  font-family: 'Fraunces', Georgia, serif;
+}
+:lang(hi) * {
+  letter-spacing: normal !important;
+  text-transform: none !important;
+}
+:lang(hi) [class*='leading-'] {
+  line-height: 1.45 !important;
+}
+:lang(hi) .font-num {
+  line-height: 1.1 !important;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+}
